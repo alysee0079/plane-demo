@@ -1,4 +1,4 @@
-import { _decorator, Component, Node, Vec3, UITransform, Prefab, instantiate, Collider2D, Contact2DType } from 'cc'
+import { _decorator, Component, Node, Vec3, UITransform, Sprite, Prefab, resources, SpriteFrame, instantiate, Collider2D, Contact2DType } from 'cc'
 import { EnemyControl } from './EnemyControl'
 const { ccclass, property } = _decorator
 
@@ -38,7 +38,11 @@ export class Player extends Component {
       // 通知敌人死亡
       other.getComponent(EnemyControl).die()
       // 销毁自己
-      this.node.destroy()
+      resources.load('hero1_die/spriteFrame', SpriteFrame, (err, spriteFrame) => {
+        if (err) return
+        this.node.getComponent(Sprite).spriteFrame = spriteFrame
+      })
+      this.scheduleOnce(() => this.node.destroy(), 0.3)
     }
   }
 }
